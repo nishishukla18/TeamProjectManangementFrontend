@@ -12,11 +12,11 @@ function App() {
     
     <BrowserRouter>
      <Toaster position="top-right" reverseOrder={false} />
+     <Header/>
       <Routes>
          
         {/* Home route */}
         <Route path="/" element={<Home />} />
-         <Route path="/header" element={<Header />} />
          <Route path="/login" element={<AuthDialog />} />
           <Route path="/email-verify" element={<EmailVerify />} />
         <Route path="/reset-password" element={<ResetPassword/>} />

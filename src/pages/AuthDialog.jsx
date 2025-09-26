@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 
 function AuthDialog() {
   const navigate = useNavigate()
-  const { backendUrl, setIsLoggedin } = useContext(AppContext)
+  const { backendUrl, setIsLoggedin ,getUserData} = useContext(AppContext)
   const [state, setState] = useState('Sign Up')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -18,17 +18,22 @@ function AuthDialog() {
   try {
     axios.defaults.withCredentials = true;
     if (state === 'Sign Up') {
-      const res = await axios.post(backendUrl + '/api/auth/register', { name, email, password });
-     if (res.data.success) {
-  toast.success(res.data.message || "Registration successful! Please verify your email.");
-  navigate('/email-verify', { state: { email, userId: res.data.userId } }); // pass userId
-} else {
-  toast.error(res.data.message);
+  const res = await axios.post(backendUrl + '/api/auth/register', { name, email, password });
+  if (res.data.success) {
+    toast.success(res.data.message || "Registration successful! Please verify your email.");
+    // store email and userId for verification step
+    localStorage.setItem("verifyEmail", email);
+    localStorage.setItem("verifyUserId", res.data.userId);
+    navigate('/email-verify', { state: { email, userId: res.data.userId } });
+  } else {
+    toast.error(res.data.message);
+  }
 }
-    } else {
+     else {
       const res = await axios.post(backendUrl + '/api/auth/login', { email, password });
       if (res.data.success) {
         setIsLoggedin(true);
+        await getUserData(); // Wait for userData to be set
         toast.success("Login Successful ✅");
         navigate('/');
       } else {

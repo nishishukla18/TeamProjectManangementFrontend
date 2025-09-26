@@ -53,11 +53,14 @@ function EmailVerify() {
     setLoading(true);
     try {
       const { data } = await axios.post(backendUrl + '/api/auth/verify-account', { userId, otp: otpValue });
-      if (data.success) {
-        toast.success(data.message);
-        setIsLoggedin(true); // Set login state to true
-        navigate('/login');  // Redirect to sign-in form
-      } else {
+     if (data.success) {
+      toast.success(data.message);
+      localStorage.removeItem("verifyEmail");
+      localStorage.removeItem("verifyUserId");
+      setIsLoggedin(false); // ✅ force login step, don't mark logged in yet
+      navigate('/login');   // go to login
+}
+ else {
         toast.error(data.message);
       }
     } catch (error) {
