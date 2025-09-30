@@ -5,6 +5,7 @@ import { useEffect } from "react";
 
 export const AppContext = createContext();
 
+axios.defaults.withCredentials = true;
 export const AppContextProvider = (props) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [isLoggedin, setIsLoggedin] = useState(false);
@@ -34,11 +35,10 @@ export const AppContextProvider = (props) => {
     toast.error(error.response?.data?.message || error.message);
 }
 
-  }
-
-//  useEffect(()=>{
-//   getAuthStatus()
-//  },[])
+   }
+ useEffect(()=>{
+  getAuthStatus()
+ },[])
   const value = {
     backendUrl,
     isLoggedin,

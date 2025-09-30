@@ -14,17 +14,16 @@ function AuthDialog() {
   const [password, setPassword] = useState('')
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
   try {
+    e.preventDefault();
     axios.defaults.withCredentials = true;
     if (state === 'Sign Up') {
   const res = await axios.post(backendUrl + '/api/auth/register', { name, email, password });
   if (res.data.success) {
     toast.success(res.data.message || "Registration successful! Please verify your email.");
-    // store email and userId for verification step
-    localStorage.setItem("verifyEmail", email);
-    localStorage.setItem("verifyUserId", res.data.userId);
-    navigate('/email-verify', { state: { email, userId: res.data.userId } });
+    setIsLoggedin(true)
+     getUserData();
+    navigate('/');
   } else {
     toast.error(res.data.message);
   }
@@ -33,7 +32,7 @@ function AuthDialog() {
       const res = await axios.post(backendUrl + '/api/auth/login', { email, password });
       if (res.data.success) {
         setIsLoggedin(true);
-        await getUserData(); // Wait for userData to be set
+        getUserData();
         toast.success("Login Successful ✅");
         navigate('/');
       } else {
