@@ -7,6 +7,9 @@ import toast from "react-hot-toast";
 
 function AuthDialog() {
   const navigate = useNavigate()
+
+  const query = new URLSearchParams(location.search);
+  const mode = query.get("mode") || "signup";
   const { backendUrl, setIsLoggedin ,getUserData} = useContext(AppContext)
   const [state, setState] = useState('Sign Up')
   const [name, setName] = useState('')

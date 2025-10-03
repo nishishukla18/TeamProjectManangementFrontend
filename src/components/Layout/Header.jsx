@@ -24,10 +24,21 @@ export default function Header() {
   }, []);
 
   // Logout function
-  const logout = () => {
+  const logout = async() => {
+    try {
+      axios.defaults.withCredentials = true;
+      const {data} = await axios.post(backendUrl + '/api/auth/logout');
+      data.success && setIsLoggedin(false);
+      data.success && setUserData(false)
+      navigate('/login')
+    } catch (error) {
+       toast.error(data.message || "Failed to logout");
+    }
     setIsLoggedin(false);
     setUserData(null);
     navigate("/login");
+    
+
     setDropdownOpen(false);
   };
 
